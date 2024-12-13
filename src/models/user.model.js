@@ -6,7 +6,7 @@ const userSchema = new Schema(
     {
         userName: {
             type: String,
-            required: true,
+            required: [true, "user name is required"],
             unique: true,
             lowercase: true,
             trim: true,
@@ -26,17 +26,20 @@ const userSchema = new Schema(
             type: String,
             enum: ["user", "admin"], // Allowed values
             default: "user", // Default value
-            required: true,
+            required: [true, "user type is required"],
         },
         jobProfile: {
             type: String,
-            enum: [
-                "Frontend Developer",
-                "Backend Developer",
-                "Architect",
-                "UX Designer",
-                "Project Manager",
-            ],
+            enum: {
+                values: [
+                    "Frontend Developer",
+                    "Backend Developer",
+                    "Architect",
+                    "UX Designer",
+                    "Project Manager",
+                ],
+                message: "Invalid job profile",
+            },
             validate: {
                 validator: function (value) {
                     return (
@@ -53,6 +56,10 @@ const userSchema = new Schema(
             required: [true, "email is required"],
             unique: true,
             trim: true,
+            match: [
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                "Please enter a valid email address",
+            ],
         },
         profileImg: {
             type: String,
@@ -65,10 +72,10 @@ const userSchema = new Schema(
             type: String,
         },
         address: {
-            city: String,
-            state: String,
-            country: String,
-            zip: String,
+            city: { type: String, default: "" },
+            state: { type: String, default: "" },
+            country: { type: String, default: "" },
+            zip: { type: String, default: "" },
         },
     },
     { timestamps: true }
