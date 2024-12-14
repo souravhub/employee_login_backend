@@ -10,7 +10,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const { userName, name, userType, jobProfile, email, password } = req.body;
 
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [{ userName }, { email }],
     });
 
@@ -27,7 +27,7 @@ const registerUser = asyncHandler(async (req, res) => {
         password,
     });
 
-    const createdUser = await User.findById(createdUser._id).select(
+    const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
     );
 

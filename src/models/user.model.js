@@ -62,7 +62,14 @@ const userSchema = new Schema(
             ],
         },
         profileImg: {
-            type: String,
+            imgUrl: {
+                type: String,
+                default: "",
+            },
+            cldPublicId: {
+                type: String,
+                default: "",
+            },
         },
         password: {
             type: String,
