@@ -19,8 +19,6 @@ const uploadFile = asyncHandler(async (req, res) => {
         throw new ApiError(400, "failed to upload file");
     }
 
-    console.log(uploadedFile, "uploadedFile");
-
     res.status(200).json(
         new ApiResponse(
             200,
