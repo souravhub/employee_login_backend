@@ -170,4 +170,53 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 });
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+const updateUserInfo = asyncHandler(async (req, res) => {
+    const {
+        firstName,
+        lastName,
+        jobProfile,
+        email,
+        userName,
+        userType,
+        profileImg,
+    } = req.body;
+
+    const updateInfo = {
+        name: {
+            firstName: firstName || req.user.name.firstName,
+            lastName: lastName || req.user.name.lastName,
+        },
+        jobProfile: jobProfile || req.user.jobProfile,
+        email: email || req.user.email,
+        userName: userName || req.user.userName,
+        userType: userType || req.user.userType,
+        profileImg: profileImg || req.user.profileImg,
+    };
+
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: updateInfo,
+        },
+        {
+            new: true,
+            runValidators: true,
+        }
+    ).select("-password -refreshToken");
+
+    if (!user) {
+        throw new ApiError(500, "Something went wrong while updating the user");
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, user, "User info updated successfully"));
+});
+
+export {
+    registerUser,
+    loginUser,
+    logoutUser,
+    refreshAccessToken,
+    updateUserInfo,
+};

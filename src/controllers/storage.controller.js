@@ -33,7 +33,8 @@ const uploadFile = asyncHandler(async (req, res) => {
 });
 
 const deleteFile = asyncHandler(async (req, res) => {
-    const { cldPublicId, fileType } = req.body;
+    console.log(req.query, "req.query");
+    const { cldPublicId, fileType } = req.query;
 
     if (!cldPublicId) {
         throw new ApiError(400, "cldPublicId is required");
