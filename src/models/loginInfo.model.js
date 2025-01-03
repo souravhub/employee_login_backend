@@ -33,4 +33,4 @@ const loginSchema = new Schema(
 
 loginSchema.plugin(mongooseAggregatePaginate);
 
-const loginInfo = mongoose.model("Login", loginSchema);
+export const LoginInfo = mongoose.model("Login", loginSchema);

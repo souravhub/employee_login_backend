@@ -21,9 +21,11 @@ app.use(express.static("public"));
 // routes import
 import userRouter from "./routes/user.routes.js";
 import uploadRouter from "./routes/storage.routes.js";
+import loginRouter from "./routes/loginInfo.routes.js";
 
 // routes declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/storage", uploadRouter);
+app.use("/api/v1/login-logout", loginRouter);
 
 export { app };
