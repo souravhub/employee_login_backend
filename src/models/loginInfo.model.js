@@ -6,6 +6,7 @@ const loginSchema = new Schema(
         createdBy: {
             type: Schema.Types.ObjectId,
             ref: "User",
+            required: true,
         },
         loginInfo: {
             isDone: {
@@ -24,7 +25,12 @@ const loginSchema = new Schema(
             },
             time: {
                 type: Date,
-                required: true,
+                validate: {
+                    validator: function (v) {
+                        return v > this.loginInfo.time;
+                    },
+                    message: "Logout time must be after login time.",
+                },
             },
         },
     },
@@ -33,4 +39,4 @@ const loginSchema = new Schema(
 
 loginSchema.plugin(mongooseAggregatePaginate);
 
-export const LoginInfo = mongoose.model("Login", loginSchema);
+export const LoginInfo = mongoose.model("LoginInfo", loginSchema);

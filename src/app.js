@@ -26,6 +26,6 @@ import loginRouter from "./routes/loginInfo.routes.js";
 // routes declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/storage", uploadRouter);
-app.use("/api/v1/login-logout", loginRouter);
+app.use("/api/v1/login-info", loginRouter);
 
 export { app };
