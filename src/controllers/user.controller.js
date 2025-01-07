@@ -213,10 +213,50 @@ const updateUserInfo = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, user, "User info updated successfully"));
 });
 
+const getAllUserList = asyncHandler(async (req, res) => {
+    if (req.user.userType !== "admin") {
+        throw new ApiError(403, "Unauthorized access");
+    }
+
+    const userList = await User.aggregate([
+        {
+            $match: {
+                userType: { $ne: "admin" }, // Exclude users with userType = "admin"
+            },
+        },
+        {
+            $project: {
+                password: 0, // Exclude sensitive fields (optional)
+                refreshToken: 0,
+                profileImg: 0,
+                address: 0,
+                createdAt: 0,
+                updatedAt: 0,
+                __v: 0,
+            },
+        },
+        {
+            $sort: { createdAt: -1 }, // Sort by creation date (newest first)
+        },
+    ]);
+
+    if (!userList) {
+        throw new ApiError(
+            500,
+            "Something went wrong while fetching the user list"
+        );
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, userList, "User list fetched successfully"));
+});
+
 export {
     registerUser,
     loginUser,
     logoutUser,
     refreshAccessToken,
     updateUserInfo,
+    getAllUserList,
 };
